@@ -2,12 +2,13 @@ package mock
 
 import (
 	"fmt"
-	"github.com/stretchr/objx"
-	"github.com/stretchr/testify/assert"
 	"reflect"
 	"runtime"
 	"strings"
 	"sync"
+
+	"github.com/stretchr/objx"
+	"github.com/stretchr/testify/assert"
 )
 
 // TestingT is an interface wrapper around *testing.T
@@ -95,7 +96,10 @@ func (m *Mock) On(methodName string, arguments ...interface{}) *Mock {
 //
 //     Mock.On("MyMethod", arg1, arg2).Return(returnArg1, returnArg2)
 func (m *Mock) Return(returnArguments ...interface{}) *Mock {
-	m.ExpectedCalls = append(m.ExpectedCalls, Call{m.onMethodName, m.onMethodArguments, returnArguments, 0})
+	calls := []Call{
+		Call{m.onMethodName, m.onMethodArguments, returnArguments, 0},
+	}
+	m.ExpectedCalls = append(calls, m.ExpectedCalls...)
 	return m
 }
 
